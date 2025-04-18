@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "PokeAPI Haskell Server Elm-Land exercise";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -21,6 +21,7 @@
                    cabal --version 
                '';
          };
+     packages.default = pkgs.haskellPackages.callCabal2nix "pokeAPI-Haskell" ./. {};
 
     };
 }
