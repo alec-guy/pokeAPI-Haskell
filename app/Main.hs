@@ -38,3 +38,19 @@ main = do
                Just pokemon -> do 
                  liftIO $ putStrLn ("Did use cache for " <> (Prelude.show x) <> " pokemon.") 
                  raw pokemon
+      get "/api/v2/pokemon/:pokemonName" $ do 
+            pokemonName <- (pathParam "pokemonName") :: ActionM String 
+            liftIO $ putStrLn $ "GET /api/v2/pokemon/" <> pokemonName
+            maybeData <- liftIO $ (Cache.lookup cache pokemonName) 
+            case maybeData of 
+             Nothing -> do 
+              liftIO $ putStrLn ("Did not use cache for " <> pokemonName <> ".") 
+              response <- httpLBS $ parseRequest_ ("http://pokeapi.com/api/v2/pokemon/ " <> pokemonName)
+              let body = getResponseBody response 
+              liftIO (insert cache pokemonName body) 
+              setHeader "Content-Type" "application/json"
+              raw body
+             Just data1 -> do 
+              liftIO $ putStrLn ("Did use cache for " <> pokemonName <> ".") 
+              raw data1 
+            
