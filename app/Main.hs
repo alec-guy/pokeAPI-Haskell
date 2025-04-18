@@ -29,12 +29,12 @@ main = do
               maybepokemon <- liftIO $ (Cache.lookup cache ((Prelude.show x) :: String))
               case maybepokemon of 
                Nothing -> do
-                 liftIO $ putStrLn "Did not use cache for 150 pokemon" 
-                 response <- httpLBS $ parseRequest_ "http://pokeapi.co/api/v2/pokemon?limit=150"
+                 liftIO $ putStrLn ("Did not use cache for " <> (Prelude.show x) <> " pokemon.")
+                 response <- httpLBS $ parseRequest_ ("http://pokeapi.co/api/v2/pokemon?limit=" <> (Prelude.show x))
                  let body = getResponseBody response
                  liftIO (insert cache ((Prelude.show x) :: String) body) 
                  setHeader "Content-Type" "application/json" 
                  raw body 
                Just pokemon -> do 
-                 liftIO $ putStrLn "Did use cache for 150 pokemon"
+                 liftIO $ putStrLn ("Did use cache for " <> (Prelude.show x) <> " pokemon.") 
                  raw pokemon
