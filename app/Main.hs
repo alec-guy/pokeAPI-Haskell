@@ -45,7 +45,7 @@ main = do
             case maybeData of 
              Nothing -> do 
               liftIO $ putStrLn ("Did not use cache for " <> pokemonName <> ".") 
-              response <- httpLBS $ parseRequest_ ("http://pokeapi.com/api/v2/pokemon/ " <> pokemonName)
+              response <- httpLBS $ parseRequest_ ("http://pokeapi.co/api/v2/pokemon/" <> pokemonName)
               let body = getResponseBody response 
               liftIO (insert cache pokemonName body) 
               setHeader "Content-Type" "application/json"
